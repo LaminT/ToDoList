@@ -17,20 +17,40 @@ class AddToDoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
-
+    
     
     @IBAction func addTapped(_ sender: Any) {
-        let toDo = ToDo()
         
-        if let unrappedTitleText = titleTextField.text {
-            toDo.name = unrappedTitleText
-            toDo.important = importantSwitch.isOn
+        /*
+         
+         let toDo = ToDo()
+         
+         if let unrappedTitleText = titleTextField.text {
+         toDo.name = unrappedTitleText
+         toDo.important = importantSwitch.isOn
+         
+         previousVC.toDos.append(toDo)
+         previousVC.tableView.reloadData()
+         
+         navigationController?.popViewController(animated: true)
+         }
+         
+         */
+        
+        if let context =  (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
             
-            previousVC.toDos.append(toDo)
-            previousVC.tableView.reloadData()
+            let toDo = ToDoCoreData(entity: ToDoCoreData.entity(), insertInto: context)
+            
+            if let unrappedTitleText = titleTextField.text {
+                toDo.name = unrappedTitleText
+                toDo.important = importantSwitch.isOn
+                
+            }
+            
+            try? context.save()
             
             navigationController?.popViewController(animated: true)
         }
@@ -38,3 +58,11 @@ class AddToDoViewController: UIViewController {
     }
     
 }
+
+
+
+
+
+
+
+
